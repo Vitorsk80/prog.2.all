@@ -25,29 +25,29 @@ const server = Bun.serve({
     "/api/todo/:index": {
       PUT: async (req) => {
         const index = parseInt(req.params.index); //analisa o index dos params e o torna em int
-        if (isNaN(index))
-          return Response.json('Índice inválido. um número inteiro é esperado.', { status: 400 });
-        const data = await req.json() as any;
-        const newItem = data.newItem || null;
-        if (!newItem)
+        if (isNaN(index)) 
+          return Response.json('Índice inválido. um número inteiro é esperado.', { status: 400 }); //se o index não for um número retorna um erro esperando um número inteiro
+        const data = await req.json() as any; // pega toda a requisição em cadastra em data
+        const newItem = data.newItem || null; //pega o valor newItem dos dados e guarda na const
+        if (!newItem) // se não tiver um novo item pede um novo item
           return Response.json('Por favor, forneça um novo item para atualizar.', { status: 400 });
         try {
-          await todo.updateItem(index, newItem);
-          return Response.json(`Item no índice ${index} atualizado para "${newItem}".`);
+          await todo.updateItem(index, newItem); // espera a função update Item do todo e atualiza com o index e o novo item
+          return Response.json(`Item no índice ${index} atualizado para "${newItem}".`);  //retorna em string ou .json e informa o sucesso
         } catch (error: any) {
-          return Response.json(error.message, { status: 400 });
+          return Response.json(error.message, { status: 400 }); //se houver um erro da status 400
         }
       },
 
       DELETE: async (req) => {
-        const index = parseInt(req.params.index);
-        if (isNaN(index))
+        const index = parseInt(req.params.index); //busca o index do item que foi informado, transforma em int e armazena no const index
+        if (isNaN(index)) // se o index não for um número retorna erro 400
           return Response.json('Índice inválido.', { status: 400 });
         try {
-          await todo.removeItem(index);
-          return Response.json(`Item no índice ${index} removido com sucesso.`);
+          await todo.removeItem(index); //tenta usar o index e chama a função do todo para remover o index com base no index
+          return Response.json(`Item no índice ${index} removido com sucesso.`); // informa o sucesso novamente
         } catch (error: any) {
-          return Response.json(error.message, { status: 400 });
+          return Response.json(error.message, { status: 400 }); // se houver algum erro com o index por exemplo, retorna erro 400
         }
       },
     },
@@ -93,8 +93,8 @@ const server = Bun.serve({
   },
 
   async fetch(req) {
-    return new Response(`Not Found`, { status: 404 });
+    return new Response(`Not Found`, { status: 404 }); // se a requisição não for nenhuma das de cima retorna erro 400
   },
 });
 
-console.log(`Server running at http://localhost:${server.port}`);
+console.log(`Server running at http://localhost:${server.port}`); // pra ficar sabido né
